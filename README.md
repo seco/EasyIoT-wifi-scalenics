@@ -1,7 +1,7 @@
-Easy IoT Development Kit (Ethernet)
+Easy IoT Development Kit (Wi-Fi)
 ====
 
-「Easy IoT Development Kit (Ethernet)」は、[EnOcean Library for Arduino](https://github.com/simics-co/EnOcean)を使って、
+「Easy IoT Development Kit (Wi-Fi)」は、[EnOcean Library for Arduino](https://github.com/simics-co/EnOcean)を使って、
 お手軽IoTシリーズのセンサー情報をIoTクラウド：[Scalenics](http://scalenics.io/)へグラフ表示することができます。
 
 ## Description
