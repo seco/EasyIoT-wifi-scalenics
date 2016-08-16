@@ -22,29 +22,34 @@ EnOcean Shield (TCM410J)で受信した無線データ(センサー情報)を、
 
 ## Requirement
 
-* お手軽IoT開発キット(Arduino Uno R3 + DolphinV4(GWC) Shield + Ethernet Shield 2)を用意してください
-* Arduino IDE 1.7.2以降のバージョンを使用してください
-* [EnOcean Library for Arduino](https://github.com/simics-co/EnOcean)をインストールしてください
-* [Arduino Client for MQTT](https://github.com/knolleary/pubsubclient)をインストールしてください<br>
-  ※インストール手順は、「[EnOcean Library for Arduino](https://github.com/simics-co/EnOcean)」のREADME.md：Install 1～4を参考にしてください
+* お手軽IoT開発キット(ESPr One + DolphinV4(GWC) Shield)を用意してください
+* [Arduino LLC (Arduino.cc)](https://www.arduino.cc/) Arduino IDE 1.6.4以降のバージョンを使用してください<br>
+  ※[Arduino SRL (Arduino.org)](http://www.arduino.org/)系のArduino IDE 1.7.Xでは、ESP8266ボードを追加できません
 
 ## Usage
 
-1. 「EasyIoT-ethernet-scalenics.ino」を実行します
+1. 「EasyIoT-wifi-scalenics.ino」を実行します
 2. スケッチ内の以下の項目を変更します<br>
 　![ChangeItems](images/ChangeItems.png "ChangeItems")
    * ① お手持ちのセンサーのIDに書き換えます
-   * ② Ethernet Shield 2のMACアドレスに書き換えます
-   * ③ 接続するルーターのIPアドレスが固定の場合は、そのIPアドレスに書き換えます（通常、変更する必要はありません）
-   * ④ ScalenicsのUsername(ID)に書き換えます
-   * ⑤ ScalenicsのManagement Console -> Admin Profile内にある「Device Token」に書き換えます
+   * ② 接続するルーターのIPアドレスが固定の場合は、そのIPアドレス, デフォルトゲートウェイ, サブネットマスクに書き換えます（通常、変更する必要はありません）
+   * ③ 接続する無線ルーターのSSIDに書き換えます
+   * ④ 接続する無線ルーターの暗号化キー（パスワード）に書き換えます
+   * ⑤ ScalenicsのUsername(ID)に書き換えます
+   * ⑥ ScalenicsのManagement Console -> Admin Profile内にある「Device Token」に書き換えます
 
 ※スケッチをマイコンボードに書き込むときは、EnOcean ShieldのSW3を「Prog」側にしてください。通常はSW3を「Normal」側にしてください。
 
 ## Install
 
-1. [GitHub repository](https://github.com/simics-co/EasyIoT-ethernet-scalenics)から[EasyIoT-ethernet-scalenics-master.zip](https://github.com/simics-co/EasyIoT-ethernet-scalenics/archive/master.zip)をダウンロードします
-2. 圧縮ファイルを展開し、フォルダ名を「EasyIoT-ethernet-scalenics」へ変更します
+1. [このサイト](http://trac.switch-science.com/wiki/esp_dev_arduino_ide)を参考に、Arduino IDEへESP8266ボードを追加します<br>
+   ※Arduino IDE 1.6.9の設定例は、以下の通りです<br>
+   ![ChangeItems](images/Settings.png "Settings")
+2. [EnOcean Library for Arduino](https://github.com/simics-co/EnOcean)をインストールします
+3. [Arduino Client for MQTT](https://github.com/knolleary/pubsubclient)をインストールします<br>
+   ※インストール手順は、「[EnOcean Library for Arduino](https://github.com/simics-co/EnOcean)」のREADME.md：Install 1～4を参考にしてください
+4. [GitHub repository](https://github.com/simics-co/EasyIoT-wifi-scalenics)から[EasyIoT-wifi-scalenics-master.zip](https://github.com/simics-co/EasyIoT-wifi-scalenics/archive/master.zip)をダウンロードします
+5. 圧縮ファイルを展開し、フォルダ名を「EasyIoT-wifi-scalenics」へ変更します
 
 ## Contribution
 

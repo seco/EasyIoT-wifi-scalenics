@@ -1,27 +1,22 @@
 /*
-  Easy IoT (Ethernet) to Scalenics
+  Easy IoT (Wi-Fi) to Scalenics
 
   This sketch connects to a IoT cloud "Scalenics" (https://api.scalenics.io/console/)
-  using an EnOcean Shield (TCM410J) by SiMICS and Arduino Ethernet Shield 2.
+  using an EnOcean Shield (TCM410J) by SiMICS and ESP-WROOM-02.
 
   The circuit:
   *Input PIN
     RX:EnOcean (TCM410J)
-    ICSP 1pin:MISO
   *Output PIN
-    ICSP 3pin:SCK
-    ICSP 4pin:MOSI
-    D10:SS(W5500)
-    D4 :SS(SD card)
+    None
 
-  Created 1 May 2016
+  Created 12 July 2016
   by LoonaiFactory
 
-  https://github.com/simics-co/EnOcean
+  https://github.com/simics-co/EasyIoT-wifi-scalenics
 */
 
-#include <SPI.h>
-#include <Ethernet2.h>
+#include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include "ESP3Parser.h"
 #include "EnOceanProfile.h"
@@ -45,14 +40,19 @@ uint8_t bfReadPoint;
 bool isDataAvailable;
 
 // Connection info data lengths
-#define IP_ADDR_LEN     4   // Length of IP address in bytes
+#define MAC_ADDR_LEN    6   // Length of MAC address in bytes
 
-// Enter a MAC address for your controller below.
-// Newer Ethernet shields have a MAC address printed on a sticker on the shield
-byte mac[] = { 0x90, 0xA2, 0xDA, 0x10, 0xXX, 0xXX };
+// Constants
+unsigned char mac_addr[MAC_ADDR_LEN];
 
 // Set the static IP address to use if the DHCP fails to assign
-IPAddress ip(192, 168, 0, 1);
+IPAddress ip(192, 168, 1, 0);
+IPAddress gateway(192, 168, 1, 1);
+IPAddress subnet(255, 255, 255, 0);
+
+// WiFi
+const char* ssid     = "YOUR_SSID";
+const char* password = "YOUR_PASSWORD";
 
 // Scalenics
 #define SC_USER "YOUR_SCALENICS_ACCOUNT"
@@ -60,7 +60,7 @@ IPAddress ip(192, 168, 0, 1);
 #define CLIENT_ID "enocean"
 #define MQTT_SERVER "api.scalenics.io"
 
-EthernetClient client;
+WiFiClient client;
 
 // MQTT client
 PubSubClient mqttClient(MQTT_SERVER, 1883, NULL, client);
@@ -166,31 +166,45 @@ void loop()
 
 static void connect(void)
 {
-  int i;
-  
   Serial.println();
   
-  // give the ethernet module time to boot up:
-  delay(2000);
+  // give the wifi module time to boot up:
+  delay(100);
+  
+  // read and display MAC address
+  String mac = WiFi.macAddress();
+  Serial.print(F("MAC Address: "));
+  Serial.println(mac);
   
   // start the Ethernet connection:
-  Serial.println("Connecting...");
+  Serial.print(F("Connecting to "));
+  Serial.print(ssid);
   
-  if (Ethernet.begin(mac) == 0) {
-    Serial.println("Failed to configure Ethernet using DHCP");
-    // no point in carrying on, so do nothing forevermore:
-    // try to congifure using IP address instead of DHCP:
-    Ethernet.begin(mac, ip);
-  }
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
   
-  Serial.print(F("IP Address: "));
-  for (i = 0; i < IP_ADDR_LEN; i++) {
-    Serial.print(Ethernet.localIP()[i], DEC);
-    if ( i < IP_ADDR_LEN - 1 ) {
-      Serial.print(F("."));
-    }
+  uint8_t timeout = 60; // 60 * 500 msec = 30 sec time out
+  while ((WiFi.status() != WL_CONNECTED) && timeout) {
+    delay(500);
+    Serial.print(F("."));
+    timeout--;
   }
   Serial.println();
+  
+  if(WiFi.status() != WL_CONNECTED) {
+    Serial.print(F("Setting static IP"));
+    WiFi.config(ip, gateway, subnet);
+    
+    while (WiFi.status() != WL_CONNECTED) {
+      delay(500);
+      Serial.print(F("."));
+    }
+    Serial.println();
+  }
+  
+  Serial.println(F("WiFi connected"));
+  Serial.print(F("IP address: "));
+  Serial.println(WiFi.localIP());
 }
 
 static void storeData(uint8_t rorg, uint32_t ID, uint32_t data)
