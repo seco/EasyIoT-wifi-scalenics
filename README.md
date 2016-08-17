@@ -42,8 +42,8 @@ EnOcean Shield (TCM410J)で受信した無線データ(センサー情報)を、
 
 ## Install
 
-1. [このサイト](http://trac.switch-science.com/wiki/esp_dev_arduino_ide)を参考に、Arduino IDEへESP8266ボードを追加します<br>
-   ※Arduino IDE 1.6.9の設定例は、以下の通りです<br>
+1. [このサイト](http://trac.switch-science.com/wiki/esp_dev_arduino_ide)を参考に、Arduino IDEへESP8266ボード version 2.3.0以降を追加します<br>
+   ※Arduino IDE 1.6.9, ESP8266ボード version 2.3.0の設定例は、以下の通りです<br>
    ![ChangeItems](images/Settings.png "Settings")
 2. [EnOcean Library for Arduino](https://github.com/simics-co/EnOcean)をインストールします
 3. [Arduino Client for MQTT](https://github.com/knolleary/pubsubclient)をインストールします<br>
